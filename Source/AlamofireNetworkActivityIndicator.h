@@ -24,5 +24,7 @@
 
 @import Foundation;
 
+#import "NetworkIndicatorHelper.h"
+
 FOUNDATION_EXPORT double AlamofireNetworkActivityIndicatorVersionNumber;
 FOUNDATION_EXPORT const unsigned char AlamofireNetworkActivityIndicatorVersionString[];

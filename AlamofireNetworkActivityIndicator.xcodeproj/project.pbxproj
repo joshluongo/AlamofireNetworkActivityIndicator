@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		03D0B9E71FB2F21A00FCC8FA /* NetworkIndicatorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D0B9E51FB2F21A00FCC8FA /* NetworkIndicatorHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		03D0B9E81FB2F21A00FCC8FA /* NetworkIndicatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D0B9E61FB2F21A00FCC8FA /* NetworkIndicatorHelper.m */; };
 		4CB928441C66E1A700CE5F08 /* AlamofireNetworkActivityIndicator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB928391C66E1A600CE5F08 /* AlamofireNetworkActivityIndicator.framework */; };
 		4CB928581C66E20600CE5F08 /* AlamofireNetworkActivityIndicator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB928561C66E20600CE5F08 /* AlamofireNetworkActivityIndicator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB9285C1C66E21100CE5F08 /* NetworkActivityIndicatorManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB9285A1C66E21100CE5F08 /* NetworkActivityIndicatorManagerTests.swift */; };
@@ -95,6 +97,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		03D0B9E51FB2F21A00FCC8FA /* NetworkIndicatorHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NetworkIndicatorHelper.h; path = Source/NetworkIndicatorHelper.h; sourceTree = "<group>"; };
+		03D0B9E61FB2F21A00FCC8FA /* NetworkIndicatorHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NetworkIndicatorHelper.m; path = Source/NetworkIndicatorHelper.m; sourceTree = "<group>"; };
 		4C0097AC1EF4CB9A0010778C /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		4C0097AD1EF4CB9A0010778C /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
 		4C0097AE1EF4CB9A0010778C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -176,6 +180,8 @@
 			isa = PBXGroup;
 			children = (
 				4CB9285E1C66E22E00CE5F08 /* NetworkActivityIndicatorManager.swift */,
+				03D0B9E51FB2F21A00FCC8FA /* NetworkIndicatorHelper.h */,
+				03D0B9E61FB2F21A00FCC8FA /* NetworkIndicatorHelper.m */,
 				4CB928551C66E1F000CE5F08 /* Supporting Files */,
 			);
 			name = Source;
@@ -229,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CB928581C66E20600CE5F08 /* AlamofireNetworkActivityIndicator.h in Headers */,
+				03D0B9E71FB2F21A00FCC8FA /* NetworkIndicatorHelper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,7 +294,7 @@
 					};
 					4CB928381C66E1A600CE5F08 = {
 						CreatedOnToolsVersion = 7.2;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 					};
 					4CB928421C66E1A700CE5F08 = {
@@ -412,6 +419,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03D0B9E81FB2F21A00FCC8FA /* NetworkIndicatorHelper.m in Sources */,
 				4CB9285F1C66E22E00CE5F08 /* NetworkActivityIndicatorManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
