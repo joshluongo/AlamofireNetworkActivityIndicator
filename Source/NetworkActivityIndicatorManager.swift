@@ -47,12 +47,12 @@ public class NetworkActivityIndicatorManager {
     private enum ActivityIndicatorState {
         case notActive, delayingStart, active, delayingCompletion
     }
-    
+
     // MARK: - Properties
-    
+
     /// The shared network activity indicator manager for the system.
     public static let shared = NetworkActivityIndicatorManager()
-    
+
     /// A boolean value indicating whether the manager is enabled. Defaults to `false`.
     public var isEnabled: Bool {
         get {
@@ -108,117 +108,117 @@ public class NetworkActivityIndicatorManager {
             }
         }
     }
-    
-    private var activityCount: Int = 0
+
+    private var requestIDs: Set<String> = []
     private var enabled: Bool = true
-    
+
     private var startDelayTimer: Timer?
     private var completionDelayTimer: Timer?
-    
-    private let lock = NSLock()
-    
+
+    private let lock = NSRecursiveLock()
+
     // MARK: - Internal - Initialization
-    
+
     init() {
         registerForNotifications()
     }
-    
+
     deinit {
         unregisterForNotifications()
-        
+
         invalidateStartDelayTimer()
         invalidateCompletionDelayTimer()
     }
-    
-    // MARK: - Activity Count
-    
-    /// Increments the number of active network requests.
+
+    // MARK: - Request Tracking
+
+    /// Adds the requestID as an active request driving the activity indicator.
     ///
-    /// If this number was zero before incrementing, the network activity indicator will start spinning after
-    /// the `startDelay`.
+    /// This method results in a no-op if the request is already being tracked.
     ///
-    /// Generally, this method should not need to be used directly.
-    public func incrementActivityCount() {
+    /// - Parameter requestID: The request identifier.
+    public func requestDidStart(requestID: String) {
         lock.lock() ; defer { lock.unlock() }
-        
-        activityCount += 1
+
+        requestIDs.insert(requestID)
         updateActivityIndicatorStateForNetworkActivityChange()
     }
-    
-    /// Decrements the number of active network requests.
+
+    /// Removes the requestID from the set of active requests driving the activity indicator.
     ///
-    /// If the number of active requests is zero after calling this method, the network activity indicator will stop
-    /// spinning after the `completionDelay`.
+    /// This method results in a no-op if the request is not being tracked.
     ///
-    /// Generally, this method should not need to be used directly.
-    public func decrementActivityCount() {
+    /// - Parameter requestID: The request identifier.
+    public func requestDidStop(requestID: String) {
         lock.lock() ; defer { lock.unlock() }
-        
-        activityCount -= 1
+
+        requestIDs.remove(requestID)
         updateActivityIndicatorStateForNetworkActivityChange()
     }
-    
+
     // MARK: - Private - Activity Indicator State
-    
+
     private func updateActivityIndicatorStateForNetworkActivityChange() {
         guard enabled else { return }
-        
+
         switch activityIndicatorState {
         case .notActive:
-            if activityCount > 0 { activityIndicatorState = .delayingStart }
+            if !requestIDs.isEmpty { activityIndicatorState = .delayingStart }
         case .delayingStart:
             // No-op - let the delay timer finish
             break
         case .active:
-            if activityCount == 0 { activityIndicatorState = .delayingCompletion }
+            if requestIDs.isEmpty { activityIndicatorState = .delayingCompletion }
         case .delayingCompletion:
-            if activityCount > 0 { activityIndicatorState = .active }
+            if !requestIDs.isEmpty { activityIndicatorState = .active }
         }
     }
-    
+
     // MARK: - Private - Notification Registration
-    
+
     private func registerForNotifications() {
         let notificationCenter = NotificationCenter.default
-        
+
         notificationCenter.addObserver(
             self,
             selector: #selector(NetworkActivityIndicatorManager.networkRequestDidStart),
-            name: Notification.Name.Task.DidResume,
+            name: Request.didResumeTaskNotification,
             object: nil
         )
-        
+
         notificationCenter.addObserver(
             self,
-            selector: #selector(NetworkActivityIndicatorManager.networkRequestDidComplete),
-            name: Notification.Name.Task.DidSuspend,
+            selector: #selector(NetworkActivityIndicatorManager.networkRequestDidStop),
+            name: Request.didSuspendTaskNotification,
             object: nil
         )
-        
+
         notificationCenter.addObserver(
             self,
-            selector: #selector(NetworkActivityIndicatorManager.networkRequestDidComplete),
-            name: Notification.Name.Task.DidComplete,
+            selector: #selector(NetworkActivityIndicatorManager.networkRequestDidStop),
+            name: Request.didCompleteTaskNotification,
             object: nil
         )
     }
-    
+
     private func unregisterForNotifications() {
         NotificationCenter.default.removeObserver(self)
     }
-    
+
     // MARK: - Private - Notifications
-    
-    @objc private func networkRequestDidStart() {
-        incrementActivityCount()
+
+    @objc private func networkRequestDidStart(notification: Notification) {
+        guard let request = notification.request else { return }
+        requestDidStart(requestID: request.id.uuidString)
     }
-    
-    @objc private func networkRequestDidComplete() {
-        decrementActivityCount()
+
+    @objc private func networkRequestDidStop(notification: Notification) {
+        guard let request = notification.request else { return }
+        requestDidStop(requestID: request.id.uuidString)
     }
-    
+
     // MARK: - Private - Timers
-    
+
     private func scheduleStartDelayTimer() {
         let timer = Timer(
             timeInterval: startDelay,
@@ -227,17 +227,15 @@ public class NetworkActivityIndicatorManager {
             userInfo: nil,
             repeats: false
         )
-        
+
         DispatchQueue.main.async {
-            RunLoop.main.add(timer, forMode: .commonModes)
-            #if os(iOS)
-                RunLoop.main.add(timer, forMode: .UITrackingRunLoopMode)
-            #endif
+            RunLoop.main.add(timer, forMode: .common)
+            RunLoop.main.add(timer, forMode: .tracking)
         }
-        
+
         startDelayTimer = timer
     }
-    
+
     private func scheduleCompletionDelayTimer() {
         let timer = Timer(
             timeInterval: completionDelay,
@@ -246,40 +244,37 @@ public class NetworkActivityIndicatorManager {
             userInfo: nil,
             repeats: false
         )
-        
+
         DispatchQueue.main.async {
-            RunLoop.main.add(timer, forMode: .commonModes)
-            #if os(iOS)
-                RunLoop.main.add(timer, forMode: .UITrackingRunLoopMode)
-            #endif
+            RunLoop.main.add(timer, forMode: .common)
+            RunLoop.main.add(timer, forMode: .tracking)
         }
-        
+
         completionDelayTimer = timer
     }
-    
+
     @objc private func startDelayTimerFired() {
         lock.lock() ; defer { lock.unlock() }
-        
-        if activityCount > 0 {
+
+        if !requestIDs.isEmpty {
             activityIndicatorState = .active
         } else {
             activityIndicatorState = .notActive
         }
     }
-    
+
     @objc private func completionDelayTimerFired() {
         lock.lock() ; defer { lock.unlock() }
         activityIndicatorState = .notActive
     }
-    
+
     private func invalidateStartDelayTimer() {
         startDelayTimer?.invalidate()
         startDelayTimer = nil
     }
-    
+
     private func invalidateCompletionDelayTimer() {
         completionDelayTimer?.invalidate()
         completionDelayTimer = nil
     }
 }
-
