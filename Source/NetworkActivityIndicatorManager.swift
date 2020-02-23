@@ -222,7 +222,9 @@ public class NetworkActivityIndicatorManager {
 
         DispatchQueue.main.async {
             RunLoop.main.add(timer, forMode: .common)
-            RunLoop.main.add(timer, forMode: .tracking)
+            #if os(iOS)
+                RunLoop.main.add(timer, forMode: .tracking)
+            #endif
         }
 
         startDelayTimer = timer
@@ -237,7 +239,9 @@ public class NetworkActivityIndicatorManager {
 
         DispatchQueue.main.async {
             RunLoop.main.add(timer, forMode: .common)
-            RunLoop.main.add(timer, forMode: .tracking)
+            #if os(iOS)
+                RunLoop.main.add(timer, forMode: .tracking)
+            #endif
         }
 
         completionDelayTimer = timer
