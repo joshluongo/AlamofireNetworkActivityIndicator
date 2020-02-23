@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		0360828924027B5F009B7F39 /* NetworkIndicatorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 0360828724027B5E009B7F39 /* NetworkIndicatorHelper.h */; };
+		0360828A24027B5F009B7F39 /* NetworkIndicatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0360828824027B5F009B7F39 /* NetworkIndicatorHelper.m */; };
 		4CB928441C66E1A700CE5F08 /* AlamofireNetworkActivityIndicator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB928391C66E1A600CE5F08 /* AlamofireNetworkActivityIndicator.framework */; };
 		4CB928581C66E20600CE5F08 /* AlamofireNetworkActivityIndicator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB928561C66E20600CE5F08 /* AlamofireNetworkActivityIndicator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB9285C1C66E21100CE5F08 /* NetworkActivityIndicatorManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB9285A1C66E21100CE5F08 /* NetworkActivityIndicatorManagerTests.swift */; };
@@ -95,6 +97,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0360828724027B5E009B7F39 /* NetworkIndicatorHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NetworkIndicatorHelper.h; path = Source/NetworkIndicatorHelper.h; sourceTree = "<group>"; };
+		0360828824027B5F009B7F39 /* NetworkIndicatorHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NetworkIndicatorHelper.m; path = Source/NetworkIndicatorHelper.m; sourceTree = "<group>"; };
 		311AAFCC23FB4CDF00AFBABD /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		4C0097AC1EF4CB9A0010778C /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		4C0097AD1EF4CB9A0010778C /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
@@ -177,6 +181,8 @@
 			children = (
 				4CB9285E1C66E22E00CE5F08 /* NetworkActivityIndicatorManager.swift */,
 				4CB928551C66E1F000CE5F08 /* Supporting Files */,
+				0360828724027B5E009B7F39 /* NetworkIndicatorHelper.h */,
+				0360828824027B5F009B7F39 /* NetworkIndicatorHelper.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -229,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CB928581C66E20600CE5F08 /* AlamofireNetworkActivityIndicator.h in Headers */,
+				0360828924027B5F009B7F39 /* NetworkIndicatorHelper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,7 +294,7 @@
 					};
 					4CB928381C66E1A600CE5F08 = {
 						CreatedOnToolsVersion = 7.2;
-						LastSwiftMigration = 1020;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
 					4CB928421C66E1A700CE5F08 = {
@@ -413,6 +420,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0360828A24027B5F009B7F39 /* NetworkIndicatorHelper.m in Sources */,
 				4CB9285F1C66E22E00CE5F08 /* NetworkActivityIndicatorManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -596,6 +604,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -616,6 +625,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

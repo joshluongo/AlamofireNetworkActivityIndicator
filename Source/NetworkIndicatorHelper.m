@@ -2,8 +2,8 @@
 //  NetworkIndicatorHelper.m
 //  AlamofireNetworkActivityIndicator
 //
-//  Created by Joshua Luongo on 8/11/17.
-//  Copyright © 2017 Alamofire. All rights reserved.
+//  Created by Josh Luongo on 23/2/20.
+//  Copyright © 2020 Alamofire. All rights reserved.
 //
 
 #import "NetworkIndicatorHelper.h"
