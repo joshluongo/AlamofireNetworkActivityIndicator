@@ -56,11 +56,11 @@ public class NetworkActivityIndicatorManager {
     /// A boolean value indicating whether the manager is enabled. Defaults to `false`.
     public var isEnabled: Bool {
         get {
-            lock.lock() ; defer { lock.unlock() }
+            lock.lock(); defer { lock.unlock() }
             return enabled
         }
         set {
-            lock.lock() ; defer { lock.unlock() }
+            lock.lock(); defer { lock.unlock() }
             enabled = newValue
         }
     }
@@ -138,7 +138,7 @@ public class NetworkActivityIndicatorManager {
     ///
     /// - Parameter requestID: The request identifier.
     public func requestDidStart(requestID: String) {
-        lock.lock() ; defer { lock.unlock() }
+        lock.lock(); defer { lock.unlock() }
 
         requestIDs.insert(requestID)
         updateActivityIndicatorStateForNetworkActivityChange()
@@ -150,7 +150,7 @@ public class NetworkActivityIndicatorManager {
     ///
     /// - Parameter requestID: The request identifier.
     public func requestDidStop(requestID: String) {
-        lock.lock() ; defer { lock.unlock() }
+        lock.lock(); defer { lock.unlock() }
 
         requestIDs.remove(requestID)
         updateActivityIndicatorStateForNetworkActivityChange()
@@ -179,26 +179,20 @@ public class NetworkActivityIndicatorManager {
     private func registerForNotifications() {
         let notificationCenter = NotificationCenter.default
 
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(NetworkActivityIndicatorManager.networkRequestDidStart),
-            name: Request.didResumeTaskNotification,
-            object: nil
-        )
+        notificationCenter.addObserver(self,
+                                       selector: #selector(NetworkActivityIndicatorManager.networkRequestDidStart),
+                                       name: Request.didResumeTaskNotification,
+                                       object: nil)
 
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(NetworkActivityIndicatorManager.networkRequestDidStop),
-            name: Request.didSuspendTaskNotification,
-            object: nil
-        )
+        notificationCenter.addObserver(self,
+                                       selector: #selector(NetworkActivityIndicatorManager.networkRequestDidStop),
+                                       name: Request.didSuspendTaskNotification,
+                                       object: nil)
 
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(NetworkActivityIndicatorManager.networkRequestDidStop),
-            name: Request.didCompleteTaskNotification,
-            object: nil
-        )
+        notificationCenter.addObserver(self,
+                                       selector: #selector(NetworkActivityIndicatorManager.networkRequestDidStop),
+                                       name: Request.didCompleteTaskNotification,
+                                       object: nil)
     }
 
     private func unregisterForNotifications() {
@@ -220,13 +214,11 @@ public class NetworkActivityIndicatorManager {
     // MARK: - Private - Timers
 
     private func scheduleStartDelayTimer() {
-        let timer = Timer(
-            timeInterval: startDelay,
-            target: self,
-            selector: #selector(NetworkActivityIndicatorManager.startDelayTimerFired),
-            userInfo: nil,
-            repeats: false
-        )
+        let timer = Timer(timeInterval: startDelay,
+                          target: self,
+                          selector: #selector(NetworkActivityIndicatorManager.startDelayTimerFired),
+                          userInfo: nil,
+                          repeats: false)
 
         DispatchQueue.main.async {
             RunLoop.main.add(timer, forMode: .common)
@@ -237,13 +229,11 @@ public class NetworkActivityIndicatorManager {
     }
 
     private func scheduleCompletionDelayTimer() {
-        let timer = Timer(
-            timeInterval: completionDelay,
-            target: self,
-            selector: #selector(NetworkActivityIndicatorManager.completionDelayTimerFired),
-            userInfo: nil,
-            repeats: false
-        )
+        let timer = Timer(timeInterval: completionDelay,
+                          target: self,
+                          selector: #selector(NetworkActivityIndicatorManager.completionDelayTimerFired),
+                          userInfo: nil,
+                          repeats: false)
 
         DispatchQueue.main.async {
             RunLoop.main.add(timer, forMode: .common)
@@ -254,7 +244,7 @@ public class NetworkActivityIndicatorManager {
     }
 
     @objc private func startDelayTimerFired() {
-        lock.lock() ; defer { lock.unlock() }
+        lock.lock(); defer { lock.unlock() }
 
         if !requestIDs.isEmpty {
             activityIndicatorState = .active
@@ -264,7 +254,7 @@ public class NetworkActivityIndicatorManager {
     }
 
     @objc private func completionDelayTimerFired() {
-        lock.lock() ; defer { lock.unlock() }
+        lock.lock(); defer { lock.unlock() }
         activityIndicatorState = .notActive
     }
 
